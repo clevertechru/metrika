@@ -9,7 +9,7 @@ module Metrika
       end
 
       # Traffic
-      %w( deepness hourly load ).each do |report|
+      %w( summary deepness hourly load ).each do |report|
         define_method "get_counter_stat_traffic_#{report}" do | id, params = {} |
           params = self.format_params(params)
 

@@ -82,6 +82,31 @@ module Metrika
         end
       end
 
+      # Goals totals
+      # https://api-metrika.yandex.ru/stat/v1/data/bytime?date1=2017-01-04&date2=2017-02-03&group=month&metrics=ym:s:goal%3Cgoal_id%3Ereaches&goal_id=16272210&id=24873551&oauth_token=AQAAAAAL0Ht7AAP7dJCGSrvrFkEaii7iEBKOv8Y
+      %w(conversionRate userConversionRate users visits reaches).each do |report|
+        define_method "get_report_goal_#{report}" do |id, goal_id, filter, params = {}|
+          params = self.format_params(params)
+
+          if filter.empty?
+            params.update(metrics: "ym:s:goal<goal_id>#{report}",
+                          goal_id: goal_id,
+                          id: id)
+          else
+            params.update(filters: "ym:s:trafficSource=='#{filter}'",
+                          metrics: "ym:s:goal<goal_id>#{report}",
+                          goal_id: goal_id,
+                          id: id)
+          end
+
+          self.get(self.send("report_goal_#{report}_path"), params)
+        end
+
+        define_method "report_goal_#{report}_path" do
+          '/stat/v1/data/bytime'
+        end
+      end
+
       # Tech
       %w( browsers os display mobile flash silverlight dotnet java cookies javascript ).each do |report|
         define_method "get_counter_stat_tech_#{report}" do | id, params = {} |

@@ -99,11 +99,7 @@ module Metrika
                           id: id)
           end
 
-          self.get(self.send("report_goal_#{report}_path"), params)
-        end
-
-        define_method "report_goal_#{report}_path" do
-          '/stat/v1/data/bytime'
+          self.get(stat_path, params)
         end
       end
 
@@ -118,6 +114,35 @@ module Metrika
         define_method "counter_stat_tech_#{report}_path" do
           "/stat/tech/#{report}"
         end
+      end
+
+      # Regions
+      # https://api-metrika.yandex.ru/stat/v1/data/bytime?date1=2017-01-09&date2=2017-02-09&group=month&dimensions=ym:s:regionCity&ids=15489991&metrics=ym%3As%3Avisits&oauth_token=AQAAAAAL0Ht7AAP7dJCGSrvrFkEaii7iEBKOv8Y
+      def get_visits_by_region(id, params = {})
+        params = self.format_params(params)
+
+        params.update(dimensions: 'ym:s:regionCity',
+                      metrics: 'ym:s:visits',
+                      id: id)
+
+        self.get(stat_path, params)
+      end
+
+      # Pages
+      # https://api-metrika.yandex.ru/stat/v1/data/bytime?date1=2017-01-09&date2=2017-02-09&group=month&preset=popular&dimensions=ym:pv:URLHash&metrics=ym:pv:users&id=15489991&oauth_token=AQAAAAAL0Ht7AAP7dJCGSrvrFkEaii7iEBKOv8Y
+      def get_pages_info(id, params = {})
+        params = self.format_params(params)
+
+        params.update(dimensions: 'ym:pv:URLHash',
+                      metrics: 'ym:pv:users',
+                      preset: 'popular',
+                      id: id)
+
+        self.get(stat_path, params)
+      end
+
+      def stat_path
+        '/stat/v1/data/bytime'
       end
     end
   end

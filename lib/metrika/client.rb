@@ -1,7 +1,8 @@
 module Metrika
   class Client
-    include Helpers    
+    include Helpers
 
+    include Api::Accounts
     include Api::Counters
     include Api::Resources
     include Api::Statistics

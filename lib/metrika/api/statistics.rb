@@ -50,6 +50,26 @@ module Metrika
         self.get("/stat/v1/data/", params.merge(:preset => 'geo_country', :ids => id))
       end
 
+      def get_counter_stat_countries(id, params = {})
+        params = format_params(params)
+
+        params.update(dimensions: 'ym:s:regionCountry',
+                      metrics: 'ym:s:visits',
+                      ids: id)
+
+        get(stat_path, params)
+      end
+
+      def get_counter_stat_cities(id, params = {})
+        params = format_params(params)
+
+        params.update(dimensions: 'ym:s:regionCity',
+                      metrics: 'ym:s:visits',
+                      ids: id)
+
+        get(stat_path, params)
+      end
+
       # Interest
       def get_counter_stat_interest(id, params = {})
         params = self.format_params(params)
